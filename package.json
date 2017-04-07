@@ -6,15 +6,15 @@
 		"start": "node app.js"
 	},
 	"dependencies": {
-		"express": "4.13.x",
-		"cfenv": "1.0.x",
-   		"passport": "0.2.x",
-                "passport-idaas-openidconnect":"1.0.0",
-		"express-session": "1.11.3",
-		"cookie-parser": "1.4.0"
+		"express": "4.x",
+		"passport": "0.3.x",
+		"passport-idaas-openidconnect":"2.x",
+		"express-session": "1.x",
+		"cookie-parser": "1.4.x",
+		"cfenv": "1.0.x"
 	},
 	"repository": {},
 	"engines": {
 		"node": "6.x"
-	} 
+	}
 }

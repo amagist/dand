@@ -6,3 +6,5 @@ applications:
   name: rps
   host: rps
   disk_quota: 1024M
+services:
+- rps-Cloudant NoSQL DB Dedicated

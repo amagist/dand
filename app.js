@@ -92,7 +92,7 @@ app.get('/auth/callback',function(req, res, next) {
 	var redirect_url = req.session.originalUrl;
 	passport.authenticate('openidconnect', {
 		successRedirect: redirect_url,
-		failureRedirect: '/failure',
+		failureRedirect: '/failure'
 	})(req,res,next);
 });
 

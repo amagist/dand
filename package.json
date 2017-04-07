@@ -1,5 +1,5 @@
 {
-	"name": "NodejsStarterApp",
+	"name": "RPS",
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
@@ -8,9 +8,13 @@
 	"dependencies": {
 		"express": "4.13.x",
 		"cfenv": "1.0.x"
+   		"passport": "0.2.x",
+                "passport-idaas-openidconnect":"1.0.0",
+		"express-session": "1.11.3",
+		"cookie-parser": "1.4.0"
 	},
 	"repository": {},
 	"engines": {
-		"node": "4.x"
+		"node": "6.x"
 	} 
 }

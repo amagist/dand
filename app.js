@@ -97,16 +97,11 @@ app.get('/auth/callback', function(req, res, next) {
  });
 
 // failure page
-app.get('/auth/callback', function(req, res) {
-	res.send('callback: ' + req.session.originalUrl); });
-
-
-// failure page
 app.get('/failure', function(req, res) {
 	res.send('login failed'); });
 
 app.get('/hello', ensureAuthenticated, function(req, res) {
-	      var claims = req.user['_json'];
+	var claims = req.user['_json'];
         var html ="<p>Hello " + claims.given_name + " " + claims.family_name + ": </p>";
         html += "<pre>" + JSON.stringify(req.user, null, 4) + "</pre>";
         html += "<hr> <a href=\"/\">home</a>";

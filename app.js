@@ -88,7 +88,7 @@ function ensureAuthenticated(req, res, next) {
 // handle callback, if authentication succeeds redirect to
 // original requested url, otherwise go to /failure
 app.get('/auth/callback', 
-//	passport.authenticate('openidconnect', { failureRedirect: '/failure' }),
+	passport.authenticate('openidconnect', { failureRedirect: '/failure' }),
 	function(req, res) {
 //    		res.redirect(req.session.originalUrl);
 		res.send('Redirect to: ' + req.session.originalUrl);

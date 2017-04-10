@@ -98,7 +98,7 @@ function ensureAuthenticated(req, res, next) {
 
 // failure page
 app.get('/auth/callback', function(req, res) {
-	res.send('callback'); });
+	res.send('callback: ' + req.session.originalUrl); });
 
 
 // failure page

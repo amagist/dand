@@ -11,6 +11,7 @@ var passport = require('passport');
 var cookieParser = require('cookie-parser');
 var fs = require('fs');
 var https = require('https');
+var RED = require("node-red");
 
 // read settings.js
 var OIDsettings = require('./oid-settings.js');
@@ -21,6 +22,10 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
 // cfenv provides access to your Cloud Foundry environment
 // for more info, see: https://www.npmjs.com/package/cfenv
 var cfenv = require('cfenv');
+
+var VCAP_APPLICATION = JSON.parse(process.env.VCAP_APPLICATION);
+var VCAP_SERVICES = JSON.parse(process.env.VCAP_SERVICES);
+
 
 // create a new express server
 var app = express();
@@ -65,12 +70,10 @@ passport.use(Strategy);
 // get the app environment from Cloud Foundry
 var appEnv = cfenv.getAppEnv();
 
-app.get('/', function(req, res) {
-	res.send('<h2>Welcome</h2><br /><a href="/hello">userinfo</a><br/><a href="/logout">logout</a>'+'<br /><a href="/">home</a>');
-});
-
+// login route
 app.get('/login', passport.authenticate('openidconnect', {}));
 
+// validate login
 function ensureAuthenticated(req, res, next) {
 	if (!req.isAuthenticated()) {
 		req.session.originalUrl = req.originalUrl;
@@ -79,7 +82,6 @@ function ensureAuthenticated(req, res, next) {
 		return next();
 	}
 }
-
 
 // handle callback, if authentication succeeds redirect to
 // original requested url, otherwise go to /failure
@@ -99,7 +101,6 @@ app.get('/hello', ensureAuthenticated, function(req, res) {
 	res.send('Hello, '+ req.user['id'] + '!');
         });
 
-
 app.get('/logout', function(req,res) {
         req.session.destroy();
         req.logout();
@@ -109,8 +110,46 @@ app.get('/logout', function(req,res) {
 // serve the files out of ./public as our main files
 app.use(express.static(__dirname + '/public'));
 
+var REDsettings = {
+    mqttReconnectTime: 15000,
+    serialReconnectTime: 15000,
+    debugMaxLength: 1000,
+
+    // Add the bluemix-specific nodes in
+    nodesDir: path.join(__dirname,"nodes"),
+
+    // Blacklist the non-bluemix friendly nodes
+    nodesExcludes:['66-mongodb.js','75-exec.js','35-arduino.js','36-rpi-gpio.js','25-serial.js','28-tail.js','50-file.js','31-tcpin.js','32-udp.js','23-watch.js'],
+
+    // Enable module reinstalls on start-up; this ensures modules installed
+    // post-deploy are restored after a restage
+    autoInstallModules: true,
+
+    // paths
+    httpAdminRoot: '/red',
+    httpNodeRoot: '/',
+    
+    // UI
+    ui: { path: "ui" },
+
+    functionGlobalContext: { },
+
+    // storageModule: require("./couchstorage")
+}
+
+// Initialise the runtime with a server and settings
+RED.init(server,REDsettings);
+
+// Serve the editor UI from /red
+app.use(REDsettings.httpAdminRoot,ensureAuthenticated, RED.httpAdmin);
+
+// Serve the http nodes UI from /api
+app.use(REDsettings.httpNodeRoot, RED.httpNode);
+
 // start server on the specified port and binding host
 app.listen(appEnv.port, '0.0.0.0', function() {
   // print a message when the server starts listening
   console.log("server starting on " + appEnv.url);
 });
+
+RED.start();

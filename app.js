@@ -139,7 +139,7 @@ var REDsettings = {
 };
 
 REDsettings.couchAppname = VCAP_APPLICATION['application_name'];
-var storageServiceName = process.env.NODE_RED_STORAGE_NAME || new RegExp("^"+settings.couchAppname+".cloudantNoSQLDB");
+var storageServiceName = process.env.NODE_RED_STORAGE_NAME || new RegExp("^"+REDsettings.couchAppname+".cloudantNoSQLDB");
 var couchService = appEnv.getService(storageServiceName);
 
 if (!couchService) {
@@ -149,7 +149,7 @@ if (!couchService) {
     }
     throw new Error("No cloudant service found");
 }    
-settings.couchUrl = couchService.credentials.url;
+REDsettings.couchUrl = couchService.credentials.url;
 
 // Create a server
 var server = http.createServer(app);

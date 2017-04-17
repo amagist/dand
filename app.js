@@ -5,6 +5,8 @@
 
 // This application uses express as its web server
 // for more info, see: http://expressjs.com
+var path = require("path");
+var when = require("when");
 var express = require('express');
 var session = require('express-session');
 var passport = require('passport');
@@ -115,7 +117,7 @@ var REDsettings = {
     debugMaxLength: 1000,
 
     // Add the bluemix-specific nodes in
-    // nodesDir: path.join(__dirname,"nodes"),
+    nodesDir: path.join(__dirname,"nodes"),
 
     // Blacklist the non-bluemix friendly nodes
     nodesExcludes:['66-mongodb.js','75-exec.js','35-arduino.js','36-rpi-gpio.js','25-serial.js','28-tail.js','50-file.js','31-tcpin.js','32-udp.js','23-watch.js'],
@@ -133,8 +135,21 @@ var REDsettings = {
 
     functionGlobalContext: { },
 
-    // storageModule: require("./couchstorage")
-}
+    storageModule: require("./couchstorage")
+};
+
+REDsettings.couchAppname = VCAP_APPLICATION['application_name'];
+var storageServiceName = process.env.NODE_RED_STORAGE_NAME || new RegExp("^"+settings.couchAppname+".cloudantNoSQLDB");
+var couchService = appEnv.getService(storageServiceName);
+
+if (!couchService) {
+    console.log("Failed to find Cloudant service");
+    if (process.env.NODE_RED_STORAGE_NAME) {
+        console.log(" - using NODE_RED_STORAGE_NAME environment variable: "+process.env.NODE_RED_STORAGE_NAME);
+    }
+    throw new Error("No cloudant service found");
+}    
+settings.couchUrl = couchService.credentials.url;
 
 // Create a server
 var server = http.createServer(app);

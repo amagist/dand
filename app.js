@@ -51,6 +51,7 @@ var Strategy = new OpenIDConnectStrategy({
                  issuer: OIDsettings.issuer_id,
                  addCACert: true,
                  CACertPathList: [
+                    '/OIDC_CIO_TEST.cer',
                     '/verisign-root-ca.pem',
                     '/symantec.pem',
                     '/blueidSSL.pem',

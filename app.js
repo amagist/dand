@@ -140,7 +140,7 @@ var REDsettings = {
 
 REDsettings.couchAppname = VCAP_APPLICATION['application_name'];
 console.log("App name: " + REDsettings.couchAppname);
-var storageServiceName = process.env.NODE_RED_STORAGE_NAME || new RegExp("^"+REDsettings.couchAppname+".cloudantNoSQLDB");
+var storageServiceName = process.env.NODE_RED_STORAGE_NAME || new RegExp("^"+REDsettings.couchAppname+".Cloudant");
 console.log("Storage service name: " + storageServiceName);
 var couchService = appEnv.getService(storageServiceName);
 

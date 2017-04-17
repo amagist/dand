@@ -51,10 +51,10 @@ var Strategy = new OpenIDConnectStrategy({
                  issuer: OIDsettings.issuer_id,
                  addCACert: true,
                  CACertPathList: [
-                    '/certs/verisign-root-ca.pem',
-                    '/certs/symantec.pem',
-                    '/certs/blueidSSL.pem',
-                    '/certs/prepiam.toronto.ca.ibm.com.pem']
+                    'verisign-root-ca.pem',
+                    'symantec.pem',
+                    'blueidSSL.pem',
+                    'prepiam.toronto.ca.ibm.com.pem']
                  },
          function(iss, sub, profile, accessToken, refreshToken, params, done)  {
 	        process.nextTick(function() {

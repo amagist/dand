@@ -108,8 +108,6 @@ app.get('/logout', function(req,res) {
         res.send("Logged out");
      });
 
-// serve the files out of ./public as our main files
-app.use(express.static(__dirname + '/public'));
 
 var REDsettings = {
     mqttReconnectTime: 15000,
@@ -149,6 +147,9 @@ app.use(REDsettings.httpAdminRoot,ensureAuthenticated, RED.httpAdmin);
 
 // Serve the http nodes UI from /api
 app.use(REDsettings.httpNodeRoot, RED.httpNode);
+
+// serve the files out of ./public as our main files
+app.use(express.static(__dirname + '/public'));
 
 // start server on the specified port and binding host
 server.listen(appEnv.port);

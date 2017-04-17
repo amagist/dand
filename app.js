@@ -83,12 +83,13 @@ function ensureAuthenticated(req, res, next) {
 
 // handle callback, if authentication succeeds redirect to
 // original requested url, otherwise go to /failure
-app.get('/auth/callback', 
-	passport.authenticate('openidconnect', { failureRedirect: '/failure' }),
-	function(req, res) {
-//    		res.redirect(req.session.originalUrl);
-		res.send('Redirect to: ' + req.session.originalUrl);
-	});
+app.get('/auth/callback', function(req,res,next) {
+    var redirect_url = req.session.originalUrl;
+        passport.authenticate('openidconnect', {
+                successRedirect: redirect_url,
+                failureRedirect: '/failure',
+        })(req,res,next);
+    });
 
 // failure page
 app.get('/failure', function(req, res) {

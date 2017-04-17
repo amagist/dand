@@ -117,7 +117,7 @@ var REDsettings = {
     debugMaxLength: 1000,
 
     // Add the bluemix-specific nodes in
-    // nodesDir: path.join(__dirname,"nodes"),
+    nodesDir: path.join(__dirname,"nodes"),
 
     // Blacklist the non-bluemix friendly nodes
     nodesExcludes:['66-mongodb.js','75-exec.js','35-arduino.js','36-rpi-gpio.js','25-serial.js','28-tail.js','50-file.js','31-tcpin.js','32-udp.js','23-watch.js'],
@@ -135,7 +135,7 @@ var REDsettings = {
 
     functionGlobalContext: { },
 
-    // storageModule: require("./couchstorage")
+    storageModule: require("./couchstorage")
 };
 
 REDsettings.couchAppname = VCAP_APPLICATION['application_name'];

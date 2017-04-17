@@ -137,6 +137,9 @@ var REDsettings = {
     // storageModule: require("./couchstorage")
 }
 
+// Create a server
+var server = http.createServer(app);
+
 // Initialise the runtime with a server and settings
 RED.init(server,REDsettings);
 
@@ -147,9 +150,7 @@ app.use(REDsettings.httpAdminRoot,ensureAuthenticated, RED.httpAdmin);
 app.use(REDsettings.httpNodeRoot, RED.httpNode);
 
 // start server on the specified port and binding host
-app.listen(appEnv.port, '0.0.0.0', function() {
-  // print a message when the server starts listening
-  console.log("server starting on " + appEnv.url);
-});
+server.listen(appEnv.port);
 
+// Start NodeRED
 RED.start();

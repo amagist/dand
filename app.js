@@ -48,7 +48,9 @@ var Strategy = new OpenIDConnectStrategy({
                  clientSecret : OIDsettings.client_secret,
                  callbackURL : OIDsettings.callback_url,
                  skipUserProfile: true,
-                 issuer: OIDsettings.issuer_id
+                 issuer: OIDsettings.issuer_id,
+                 addCACert: true,
+		 CACertPathList: ['/oidc_w3id_staging.cer']
                  },
          function(iss, sub, profile, accessToken, refreshToken, params, done)  {
 	        process.nextTick(function() {

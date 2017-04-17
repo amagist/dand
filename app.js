@@ -10,6 +10,7 @@ var session = require('express-session');
 var passport = require('passport');
 var cookieParser = require('cookie-parser');
 var fs = require('fs');
+var http = require('http');
 var https = require('https');
 var RED = require("node-red");
 

@@ -7,6 +7,7 @@
 	},
 	"dependencies": {
 		"express": "4.x",
+		"lodash": "4.x",
 		"passport": "0.3.x",
 		"passport-idaas-openidconnect":"2.x",
 		"express-session": "1.x",

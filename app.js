@@ -5,6 +5,7 @@
 
 // This application uses express as its web server
 // for more info, see: http://expressjs.com
+var _ = require("lodash");
 var path = require("path");
 var when = require("when");
 var express = require('express');
@@ -96,14 +97,6 @@ app.get('/auth/callback', function(req,res,next) {
         })(req,res,next);
     });
 
-// failure page
-app.get('/failure', function(req, res) {
-	res.send('Login failed'); });
-
-app.get('/hello', ensureAuthenticated, function(req, res) {
-	res.send('Hello, '+ req.user['id'] + '!');
-        });
-
 app.get('/logout', function(req,res) {
         req.session.destroy();
         req.logout();
@@ -159,11 +152,20 @@ var server = http.createServer(app);
 // Initialise the runtime with a server and settings
 RED.init(server,REDsettings);
 
-// Serve the editor UI from /red
+// Serve the editor UI
 app.use(REDsettings.httpAdminRoot,ensureAuthenticated, RED.httpAdmin);
 
-// Serve the http nodes UI from /api
+// Serve the http nodes UI
 app.use(REDsettings.httpNodeRoot, RED.httpNode);
+
+// failure page
+app.get('/failure', function(req, res) {
+	res.send('Login failed'); });
+
+// Check authentication page
+app.get('/hello', ensureAuthenticated, function(req, res) {
+	res.send('Hello, '+ req.user['id'] + '!');
+        });
 
 // serve the files out of ./public as our main files
 app.use(express.static(__dirname + '/public'));

@@ -59,7 +59,7 @@ var Strategy = new OpenIDConnectStrategy({
                  skipUserProfile: true,
                  issuer: OIDsettings.issuer_id,
                  addCACert: true,
-		 CACertPathList: ['/oidc_w3id_staging.cer']
+		 CACertPathList: ['/oidc_w3id.cer']
                  },
          function(iss, sub, profile, accessToken, refreshToken, params, done)  {
 	        process.nextTick(function() {
@@ -152,17 +152,20 @@ var server = http.createServer(app);
 // Initialise the runtime with a server and settings
 RED.init(server,REDsettings);
 
-// Serve the editor UI
-app.use(REDsettings.httpAdminRoot,ensureAuthenticated, RED.httpAdmin);
+// Serve the editor UI - must be authenticated
+app.use(REDsettings.httpAdminRoot, ensureAuthenticated, RED.httpAdmin);
 
-// Serve the http nodes UI
+// Serve the http nodes UI (comment out following line if you require authenticated endpoint)
 app.use(REDsettings.httpNodeRoot, RED.httpNode);
 
-// failure page
+// Serve the http nodes UI (uncomment following line if you require authenticated endpoint - needed for authenticated dashboard)
+// app.use(REDsettings.httpNodeRoot, ensureAuthenticated, RED.httpNode);
+
+// failure page (can be overriden within NodeRED)
 app.get('/failure', function(req, res) {
 	res.send('Login failed'); });
 
-// Check authentication page
+// Check authentication page (can be overriden within NodeRED)
 app.get('/hello', ensureAuthenticated, function(req, res) {
 	res.send('Hello, '+ req.user['id'] + '!');
         });

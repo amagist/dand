@@ -5,7 +5,7 @@ This repository deploys a NodeRED instance which is authenticated via w3id (and 
 ## To deploy:
 
 
-[![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.ibm.com/rapid-prototyping/node-red-w3id # [required])
+[![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.ibm.com/rapid-prototyping/node-red-w3id)
 
 1. Decide on app name and route on Bluemix
 2. Register Bluemix route at https://w3.innovate.ibm.com/tools/sso/home.html as an OpenIDConnect service

@@ -1,5 +1,5 @@
 {
-	"name": "RPS",
+	"name": "GDPR-Chatbot",
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
@@ -14,15 +14,18 @@
 		"cookie-parser": "1.4.x",
 		"cfenv": "1.0.x",
 		"when": "~3.x",
-        	"nano": "~5.11.0",
-        	"feedparser":"~0.19.2",
-        	"redis":"~0.10.1",
-        	"node-red": "0.x",
+    "nano": "~5.11.0",
+    "feedparser":"~0.19.2",
+    "redis":"~0.10.1",
+    "node-red": "0.x",
         	"node-red-bluemix-nodes":"1.x",
         	"node-red-node-watson":"0.x",
         	"node-red-node-cf-cloudant":"0.x",
         	"node-red-contrib-scx-ibmiotapp":"0.x",
-        	"node-red-contrib-ibmpush":"0.x"
+        	"node-red-contrib-ibmpush":"0.x",
+					"node-red-contrib-slack":"0.1.2",
+					"node-red-contrib-chatbot":"0.9.3",
+					"node-red-contrib-play-audio":"2.2.3"
 	},
 	"repository": {},
 	"engines": {

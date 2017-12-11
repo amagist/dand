@@ -122,7 +122,7 @@ var REDsettings = {
     // paths
     httpAdminRoot: '/red',
     httpNodeRoot: '/',
-    
+
     // UI
     ui: { path: "ui" },
 
@@ -133,7 +133,10 @@ var REDsettings = {
 
 REDsettings.couchAppname = VCAP_APPLICATION['application_name'];
 console.log("App name: " + REDsettings.couchAppname);
+console.log("Test: " + "^"+REDsettings.couchAppname+".cloudantNoSQLDB");
 var storageServiceName = process.env.NODE_RED_STORAGE_NAME || new RegExp("^"+REDsettings.couchAppname+".Cloudant");
+
+
 console.log("Storage service name: " + storageServiceName);
 var couchService = appEnv.getService(storageServiceName);
 
@@ -143,7 +146,7 @@ if (!couchService) {
         console.log(" - using NODE_RED_STORAGE_NAME environment variable: "+process.env.NODE_RED_STORAGE_NAME);
     }
     throw new Error("No cloudant service found");
-}    
+}
 REDsettings.couchUrl = couchService.credentials.url;
 
 // Create a server

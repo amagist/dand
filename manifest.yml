@@ -3,9 +3,8 @@ applications:
   memory: 512M
   instances: 1
   domain: w3ibm.mybluemix.net
-  name: GDPR-Chat
-  host: GDPR-Chat
+  name: RPT-microsite-test
+  host: RPT-microsite-test
   disk_quota: 1024M
 services:
- - GDPR-Chat-Cloudant NoSQL DB Dedicated
- - GDPR-Conversation
+ - RPT-microsite-test-Cloudant NoSQL DB Dedicated

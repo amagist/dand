@@ -1,10 +1,10 @@
 applications:
 - path: .
-  memory: 512M
+  memory: 768M
   instances: 1
   domain: w3ibm.mybluemix.net
-  name: RPT-microsite-test
-  host: RPT-microsite-test
+  name: IBM-Rapid-Prototyping
+  host: IBM-Rapid-Prototyping
   disk_quota: 1024M
 services:
- - RPT-microsite-test-Cloudant NoSQL DB Dedicated
+- IBM-Rapid-Prototyping-Cloudant NoSQL DB Dedicated

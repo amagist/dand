@@ -11,6 +11,7 @@
 		"express": "4.x",
 		"express-session": "^1.15.6",
 		"feedparser": "~0.19.2",
+		"finalhandler": "^1.1.1",
 		"lodash": "^4.17.10",
 		"nano": "^5.11.2",
 		"node-red": "^0.18",
@@ -25,6 +26,7 @@
 		"passport": "0.3.x",
 		"passport-idaas-openidconnect": "2.x",
 		"redis": "~0.10.1",
+		"serve-static": "^1.13.2",
 		"util": "^0.10.3",
 		"when": "~3.x"
 	},

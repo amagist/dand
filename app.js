@@ -9,7 +9,9 @@ var fs = require('fs');
 var http = require('http');
 var https = require('https');
 var RED = require("node-red");
-const util = require("util")
+const util = require("util");
+var finalhandler = require('finalhandler')
+var serveStatic = require("serve-static")
 
 // read settings.js
 var OIDsettings = require('./oid-settings.js');
@@ -161,9 +163,6 @@ RED.init(server, REDsettings);
 // Serve the editor UI - must be authenticated
 app.use(REDsettings.httpAdminRoot, ensureAuthenticated, RED.httpAdmin);
 
-// Serve the http nodes UI (comment out following line if you require authenticated endpoint)
-app.use(REDsettings.httpNodeRoot, RED.httpNode);
-
 // Serve the http nodes UI (uncomment following line if you require authenticated endpoint - needed for authenticated dashboard)
 app.use(REDsettings.httpNodeRoot, ensureAuthenticated, RED.httpNode);
 
@@ -177,12 +176,21 @@ app.get('/hello', ensureAuthenticated, function(req, res) {
   res.send('Hello, ' + req.user['id'] + '!');
 });
 
-// serve the files out of ./public as our main files (regex to catch all)
-app.get(/^(.+)$/, ensureAuthenticated, function(req, res) {
-  res.sendfile(__dirname + "/public/" + req.params[0]);
-});
+// // serve the files out of ./public as our main files (regex to catch all)
+// app.get(/^(.+)$/, ensureAuthenticated, function(req, res) {
+//   console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<req params[0]: ", req.params[0]);
+//   res.sendfile(__dirname + "/public/" + req.params[0]);
+// });
+// app.use(express.static(__dirname + '/public'), ensureAuthenticated);
 
-app.use(express.static(__dirname + '/public'), ensureAuthenticated);
+app.use(express.static(__dirname + '/public/'));
+var serve = serveStatic('public')
+
+// Create server
+server = http.createServer(function onRequest (req, res) {
+  serve(req, res, finalhandler(req, res))
+})
+
 
 // start server on the specified port and binding host
 server.listen(appEnv.port);

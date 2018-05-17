@@ -177,7 +177,7 @@ app.get('/hello', ensureAuthenticated, function(req, res) {
 });
 // Check authentication page (can be overriden within NodeRED)
 app.get('/', ensureAuthenticated, function(req, res) {
-  res.sendFile(path.join(__dirname, '../public/pages', 'index.html'));
+  res.redirect('/pages/index.html')
 });
 
 // serve the files out of ./public as our main files

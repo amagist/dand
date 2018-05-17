@@ -177,11 +177,11 @@ app.get('/hello', ensureAuthenticated, function(req, res) {
 });
 // Check authentication page (can be overriden within NodeRED)
 app.get('/', ensureAuthenticated, function(req, res) {
-  res.sendFile('index.html')
+  res.sendFile(path.join(__dirname, '../public/pages', 'index.html'));
 });
 
 // serve the files out of ./public as our main files
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/public'),ensureAuthenticated);
 
 // start server on the specified port and binding host
 server.listen(appEnv.port);

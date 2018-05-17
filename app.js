@@ -175,22 +175,13 @@ app.get('/failure', function(req, res) {
 app.get('/hello', ensureAuthenticated, function(req, res) {
   res.send('Hello, ' + req.user['id'] + '!');
 });
+// Check authentication page (can be overriden within NodeRED)
+app.get('/', ensureAuthenticated, function(req, res) {
+  res.sendFile('index.html')
+});
 
-// // serve the files out of ./public as our main files (regex to catch all)
-// app.get(/^(.+)$/, ensureAuthenticated, function(req, res) {
-//   console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<req params[0]: ", req.params[0]);
-//   res.sendfile(__dirname + "/public/" + req.params[0]);
-// });
-// app.use(express.static(__dirname + '/public'), ensureAuthenticated);
-
-app.use(express.static(__dirname + '/public/'));
-var serve = serveStatic('public')
-
-// Create server
-server = http.createServer(function onRequest (req, res) {
-  serve(req, res, finalhandler(req, res))
-})
-
+// serve the files out of ./public as our main files
+app.use(express.static(__dirname + '/public'));
 
 // start server on the specified port and binding host
 server.listen(appEnv.port);

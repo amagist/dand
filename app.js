@@ -134,7 +134,7 @@ var REDsettings = {
     type: "credentials",
     users: [{
       username: "admin",
-      password: "$2a$08$RWESklWuO.QnyaHyoszxWuZda21OAuu3KUyBrKvih9zhk23ozwl9i", // paste your password hash here
+      password: "", // paste your password hash here
       permissions: "*"
     }]
   }
@@ -169,11 +169,6 @@ app.use(REDsettings.httpNodeRoot, ensureAuthenticated, RED.httpNode);
 // failure page (can be overriden within NodeRED)
 app.get('/failure', function(req, res) {
   res.send('Login failed');
-});
-
-// Check authentication page (can be overriden within NodeRED)
-app.get('/hello', ensureAuthenticated, function(req, res) {
-  res.send('Hello, ' + req.user['id'] + '!');
 });
 
 // redirect root to index.html

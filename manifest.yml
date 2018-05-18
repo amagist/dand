@@ -3,8 +3,8 @@ applications:
   memory: 768M
   instances: 1
   domain: w3ibm.mybluemix.net
-  name: IBM-Rapid-Prototyping
-  host: IBM-Rapid-Prototyping
+  name: <APPNAME>
+  host: <APPNAME>
   disk_quota: 1024M
 services:
-- IBM-Rapid-Prototyping-Cloudant NoSQL DB Dedicated
+- <insert service here>

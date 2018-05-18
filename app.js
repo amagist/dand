@@ -175,7 +175,8 @@ app.get('/failure', function(req, res) {
 app.get('/hello', ensureAuthenticated, function(req, res) {
   res.send('Hello, ' + req.user['id'] + '!');
 });
-// Check authentication page (can be overriden within NodeRED)
+
+// redirect root to index.html
 app.get('/', ensureAuthenticated, function(req, res) {
   res.redirect('/pages/index.html')
 });

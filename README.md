@@ -2,6 +2,9 @@
 
 Deploys a microsite using the RPT's methodologies, allowing you to get a site running as fast as possible. Built with Mobirise, hosted on IBM Cloud. There's also an option to authenticate users using w3id, and a node-RED instance to help you deploy additional services such as a Cloudant Database, or a chatbot.
 
+
+`// at some point this will all be automated`
+
 ## Step 0 - Fork this Repo, and some pre-reqs
 
 1.  On GitHub, fork this repo, then clone it onto your local machine.
@@ -27,7 +30,7 @@ We recommend doing this even if you don't think you'll need node-RED. It'll give
 
 If needed, follow the instructions below. If not, uncomment `return next();` on line 80 ish, which will disable authentication. For now, authentication only works on private CIO) Cloud.
 
-1.  Register Bluemix route at <https://w3.innovate.ibm.com/tools/sso/home.html> as an OpenIDConnect service (For the call back URL, register as `<Bluemix route>/auth/callback`)
+1.  Register Bluemix route at [https://w3.innovate.ibm.com/tools/sso/home.html](https://w3.innovate.ibm.com/tools/sso/home.html) as an OpenIDConnect service (For the call back URL, register as `<Bluemix route>/auth/callback`)
 2.  To test, use of the w3id Staging service is recommended, this uses the live directory but not the live OpenIDConnect service
 3.  Download the certificate supplied as `oidc_w3id.cer` and upload to main directory of repo
 4.  Update `oid-settings.js` with the configuration settings supplied by the sso registration service (including the URL of the callback)

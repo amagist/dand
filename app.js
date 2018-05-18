@@ -15,6 +15,8 @@ var serveStatic = require("serve-static")
 
 // read settings.js
 var OIDsettings = require('./oid-settings.js');
+var redAuth = require('./redAuth.js');
+var auth = require('./auth.js')
 
 // work around intermediate CA issue
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
@@ -77,7 +79,9 @@ app.get('/login', passport.authenticate('openidconnect', {}));
 
 // validate login
 function ensureAuthenticated(req, res, next) {
-  // return next(); // remove this to remove authentication
+  if (!auth.on) {
+    return next();
+  }
   if (!req.isAuthenticated()) {
     req.session.originalUrl = req.originalUrl;
     res.redirect('/login');
@@ -133,8 +137,8 @@ var REDsettings = {
   adminAuth: {
     type: "credentials",
     users: [{
-      username: "admin",
-      password: "", // paste your password hash here
+      username: redAuth.username,
+      password: redAuth.password, // paste your password hash here
       permissions: "*"
     }]
   }

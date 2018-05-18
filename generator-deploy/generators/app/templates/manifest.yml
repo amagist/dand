@@ -1,0 +1,10 @@
+applications:
+- path: .
+  memory: 768M
+  instances: 1
+  domain: <%= domain %>
+  name: <%= name %>
+  host: <%= name %>
+  disk_quota: 1024M
+services:
+- <%= service %>

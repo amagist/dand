@@ -5,7 +5,7 @@ Deploys a microsite using the RPT's methodologies, allowing you to get a site ru
 ## Step 0 - Fork this Repo, and some pre-reqs
 
 1.  On GitHub, fork this repo, then clone it onto your local machine.
-2.  Install necessary tools `//to do?`
+2.  Install necessary tools: `Cloud Foundary CLI`, `node & npm`
 3.  Think of a unique app name for your bluemix route. Something like *client-name*-microsite would work.
 
 ## Step 1 - Generate some HTML

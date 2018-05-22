@@ -4,14 +4,11 @@ module.exports = class extends Generator {
     constructor(args, opts) {
         super(args, opts)
         this.argument('auth', {type: String, required: false})
-        this.options.auth
-            ? this.config.set('auth', true)
-            : this.config.set('auth', false)
+        this.config.set('auth', this.options.auth)
     }
 
     prompting() {
-        this.spawnCommand('npm', ['- v'])
-        if (this.config.get('auth')) {
+        if (this.config.get('auth') === 'w3id') {
             this.log(
                 '\n Auto-config for microsites. First, take a look at the readme.'
             )
@@ -68,8 +65,78 @@ module.exports = class extends Generator {
                 )
                 this.config.set('id', answers.id)
                 this.config.set('secret', answers.secret)
-                this.config.set('authentication', true)
+                this.config.set('authentication', 'w3id')
             })
+        } else if (this.config.get('auth') === 'basic') {
+            // do basic auth stuff
+
+            this.log(
+                '\n Auto-config for microsites. First, take a look at the readme.'
+            )
+            this.log('You have selected to run with basic authentication')
+            return this.prompt([
+                {
+                    type: 'input',
+                    name: 'name',
+                    message: 'Enter the name of your app',
+                    default: 'sample-microsite',
+                },
+                {
+                    type: 'confirm',
+                    name: 'dedicated',
+                    message: 'Will you be running on IBM CIO (private) cloud?',
+                },
+                {
+                    type: 'input',
+                    name: 'username',
+                    message: 'Enter a username for your node-RED editor',
+                    default: 'admin',
+                },
+                {
+                    type: 'input',
+                    name: 'password',
+                    message: 'Enter a password for your node-RED editor',
+                    default: 'password',
+                },
+                {
+                    type: 'input',
+                    name: 'siteUsername',
+                    message: 'Enter a username for your microsite',
+                    default: 'admin',
+                },
+                {
+                    type: 'input',
+                    name: 'sitePassword',
+                    message: 'Enter a password for your microsite',
+                    default: 'password',
+                },
+            ]).then(answers => {
+                if (answers.dedicated) {
+                    this.config.set('domain', 'w3ibm.mybluemix.net')
+                    this.config.set(
+                        'DB',
+                        answers.name + '-Cloudant NoSQL DB Dedicated'
+                    )
+                } else {
+                    this.config.set('domain', 'eu-gb.mybluemix.net')
+                    this.config.set('DB', answers.name + '-Cloudant NoSQL DB')
+
+                    this.config.save()
+                    this.config.set('name', answers.name)
+                    this.config.set('dedicated', answers.dedicated)
+                    this.config.set('username', answers.username)
+                    this.config.set(
+                        'password',
+                        require('bcryptjs').hashSync(answers.password, 8)
+                    )
+                    this.config.set('id', 1)
+                    this.config.set('secret', 1)
+                    this.config.set('authentication', 'basic')
+                    this.config.set('siteUsername', answers.siteUsername)
+                    this.config.set('sitePassword', answers.sitePassword)
+                }
+            })
+            // end basic auth stuff
         } else {
             this.log(
                 '\n Auto-config for microsites. First, take a look at the readme.'
@@ -158,6 +225,8 @@ module.exports = class extends Generator {
             this.destinationPath('./auth.js'),
             {
                 authentication: this.config.get('authentication'),
+                siteUsername: this.config.get('siteUsername'),
+                sitePassword: this.config.get('siteUsername'),
             }
         ) // done creating auth file
     }

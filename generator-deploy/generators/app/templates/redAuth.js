@@ -1,2 +1,2 @@
-exports.username = "<%= username %>";
-exports.password = "<%= password %>";
+exports.username = '<%= username %>'
+exports.password = '<%= password %>'

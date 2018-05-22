@@ -5,6 +5,7 @@ const passport = require('passport')
 const cookieParser = require('cookie-parser')
 const http = require('http')
 const RED = require('node-red')
+const basicAuth = require('basic-auth')
 
 // read settings.js
 const OIDsettings = require('./oid-settings.js')
@@ -75,15 +76,38 @@ app.get('/login', passport.authenticate('openidconnect', {}))
 
 // validate login
 function ensureAuthenticated(req, res, next) {
-    if (!auth.on) {
-        return next()
-    }
-    if (!req.isAuthenticated()) {
-        req.session.originalUrl = req.originalUrl
-        res.redirect('/login')
+    if (auth.on === 'basic') {
+        console.log('in basic')
+
+        //do basic auth
+        var credentials = basicAuth(req)
+
+        if (
+            !credentials ||
+            credentials.name !== auth.username ||
+            credentials.pass !== auth.password
+        ) {
+            console.log('in no match')
+            res.statusCode = 401
+            res.setHeader('WWW-Authenticate', 'Basic realm="log in"')
+            res.end('Access denied')
+        } else {
+            console.log('in match (access granted')
+            return next()
+        }
+        // end pasted code
+    } else if (auth.on === 'w3id') {
+        console.log('in w3')
+        if (!req.isAuthenticated()) {
+            req.session.originalUrl = req.originalUrl
+            res.redirect('/login')
+        } else {
+            //  return next();
+            next()
+        }
     } else {
-        //  return next();
-        next()
+        console.log('no auth')
+        return next()
     }
 }
 

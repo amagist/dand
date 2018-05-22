@@ -5,8 +5,11 @@ Deploys a microsite using the RPT's methodologies, allowing you to get a site ru
 ## Step 0 - Fork this Repo, and some pre-reqs
 
 1.  On GitHub, fork this repo, then clone it onto your local machine.
-2.  Install necessary tools: `Cloud Foundary CLI`, `node` & `npm`. You may need to run `npm install -g yo`
-3.  Think of a unique app name for your bluemix route. Something like _client-name_-microsite would work.
+2.  Install necessary tools: `Cloud Foundary CLI`, `node` & `npm`.
+3.  You need to run `npm install -g yo`
+4.  From the `generator-deploy` directory of this repo, run `npm link` (this is a temporary workaround for the yeoman script). Once you've done this, navigate back to the root directory or you'll forget later
+5.  Think of a unique app name for your bluemix route. Something like _client-name_-microsite would work.
+6.  Log into to Cloud foundary `cf login`. Make sure you're in the same location (api, space, account, region) as where you plan to put the microsite.
 
 ## Step 1 - Generate some HTML
 
@@ -18,24 +21,27 @@ Deploys a microsite using the RPT's methodologies, allowing you to get a site ru
 
 ## Step 2 - Set up a Cloudant DB instance - needed for node-RED
 
-1.  Create a CloudantDB service - in the space where the microsite will be
-2.  Click Catalog, then search for Cloudant
+1.  Log into [bluemix](console.bluemix.net), ensuring you're in the right location (where you cf logged in to).
+2.  Create a CloudantDB service - in the space where the microsite will be:
+    * Click Catalog, then search for Cloudant
     * if on IBM CIO Cloud, deploy a "CloudantDB Dedicated" instance, with the following naming convention `<appname>-Cloudant NoSQL DB Dedicated`. Note, to use Authentication, at the moment you must use this method, on CIO bluemix.
     * If on the public IBM Cloud, use a normal CloudantDB, with the name `<appname>-Cloudant NoSQL DB`.
 
 ## Step 3 - Authentication (if using it)
 
-2.  Register Bluemix route at [https://w3.innovate.ibm.com/tools/sso/home.html](https://w3.innovate.ibm.com/tools/sso/home.html) as an OpenIDConnect service (For the callback URL, register as `<Bluemix route>/auth/callback`)
-3.  To test, use of the w3id Staging service is recommended, this uses the live directory but not the live OpenIDConnect service
-4.  Download the certificate supplied as `oidc_w3id.cer` and upload to the root directory of this repo
-5.  Keep a note of your Client ID and secret, you'll need it later
+1.  There's an option to use basic (username and password) authentication, or use IBM's SSO/w3id to log in. For any client facing public microsites we recommend using the basic authentication, for anything internal use SSO. You can also have no authentication.
+2.  w3id setup (if using it)
+    * Register Bluemix route at [https://w3.innovate.ibm.com/tools/sso/home.html](https://w3.innovate.ibm.com/tools/sso/home.html) as an OpenIDConnect service (For the callback URL, register as `<Bluemix route>/auth/callback`)
+    * To test, use of the w3id Staging service is recommended, this uses the live directory but not the live OpenIDConnect service
+    * Download the certificate supplied as `oidc_w3id.cer` and upload to the root directory of this repo
+    * Keep a note of your Client ID and secret, you'll need it later
 
 ## Step 3 - Yeoman Generator
 
-1.  Run `yo deploy` (for no authentication) or `yo deploy auth` (for authentication) from the root directory of this repo.
+1.  Run `yo deploy` (for no authentication) or `yo deploy w3id` (for w3id authentication), or `yo deploy basic` (for basic authentication) from the root directory of this repo (it won't work anywhere else).
 2.  Follow the instructions, entering your information when asked
 3.  This will create several files, taking the hassle out of configuring the authentication and node-RED setup yourself.
-4.  Log into to Cloud foundary `cf login`. Make sure you're in the same location (api, space, account, region) as where you created the cloudant instance. Use the cf command line tools to deploy - `cf push`- This will deploy your app in your area, connecting to the DB you've set up.
+4.  Use the cf command line tools to deploy - `cf push`- This will deploy your app in your area, connecting to the DB you've set up.
 
 ## Step 4 - Done!
 

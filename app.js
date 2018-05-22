@@ -75,6 +75,13 @@ var appEnv = cfenv.getAppEnv()
 // login route
 app.get('/login', passport.authenticate('openidconnect', {}))
 
+function bcryptMatch(input, hash) {
+    if (bcrypt.compareSync(input, hash)) {
+        return true
+    } else {
+        return false
+    }
+}
 // validate login
 function ensureAuthenticated(req, res, next) {
     if (auth.on === 'basic') {
@@ -83,7 +90,8 @@ function ensureAuthenticated(req, res, next) {
         if (
             !credentials ||
             credentials.name !== auth.username ||
-            credentials.pass !== bcrypt.hashSync(auth.password, 8)
+            !bcryptMatch(credentials.pass, auth.password)
+            /* bcrypt.hashSync(credentials.pass, 8) !== auth.password */
         ) {
             res.statusCode = 401
             res.setHeader('WWW-Authenticate', 'Basic realm="log in"')

@@ -134,6 +134,9 @@ module.exports = class extends Generator {
                 this.config.set('secret', 1)
                 this.config.set('authentication', 'basic')
                 this.config.set('siteUsername', answers.siteUsername)
+
+                // do some logic here to hash then store pw
+
                 this.config.set(
                     'sitePassword',
                     bcrypt.hashSync(answers.sitePassword, 8)

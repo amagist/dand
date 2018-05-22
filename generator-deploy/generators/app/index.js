@@ -120,21 +120,20 @@ module.exports = class extends Generator {
                 } else {
                     this.config.set('domain', 'eu-gb.mybluemix.net')
                     this.config.set('DB', answers.name + '-Cloudant NoSQL DB')
-
-                    this.config.save()
-                    this.config.set('name', answers.name)
-                    this.config.set('dedicated', answers.dedicated)
-                    this.config.set('username', answers.username)
-                    this.config.set(
-                        'password',
-                        require('bcryptjs').hashSync(answers.password, 8)
-                    )
-                    this.config.set('id', 1)
-                    this.config.set('secret', 1)
-                    this.config.set('authentication', 'basic')
-                    this.config.set('siteUsername', answers.siteUsername)
-                    this.config.set('sitePassword', answers.sitePassword)
                 }
+                //this.config.save()
+                this.config.set('name', answers.name)
+                this.config.set('dedicated', answers.dedicated)
+                this.config.set('username', answers.username)
+                this.config.set(
+                    'password',
+                    require('bcryptjs').hashSync(answers.password, 8)
+                )
+                this.config.set('id', 1)
+                this.config.set('secret', 1)
+                this.config.set('authentication', 'basic')
+                this.config.set('siteUsername', answers.siteUsername)
+                this.config.set('sitePassword', answers.sitePassword)
             })
             // end basic auth stuff
         } else {
@@ -176,19 +175,18 @@ module.exports = class extends Generator {
                 } else {
                     this.config.set('domain', 'eu-gb.mybluemix.net')
                     this.config.set('DB', answers.name + '-Cloudant NoSQL DB')
-
-                    this.config.save()
-                    this.config.set('name', answers.name)
-                    this.config.set('dedicated', answers.dedicated)
-                    this.config.set('username', answers.username)
-                    this.config.set(
-                        'password',
-                        require('bcryptjs').hashSync(answers.password, 8)
-                    )
-                    this.config.set('id', 1)
-                    this.config.set('secret', 1)
-                    this.config.set('authentication', false)
                 }
+                this.config.save()
+                this.config.set('name', answers.name)
+                this.config.set('dedicated', answers.dedicated)
+                this.config.set('username', answers.username)
+                this.config.set(
+                    'password',
+                    require('bcryptjs').hashSync(answers.password, 8)
+                )
+                this.config.set('id', 1)
+                this.config.set('secret', 1)
+                this.config.set('authentication', false)
             })
         }
     }
@@ -226,7 +224,7 @@ module.exports = class extends Generator {
             {
                 authentication: this.config.get('authentication'),
                 siteUsername: this.config.get('siteUsername'),
-                sitePassword: this.config.get('siteUsername'),
+                sitePassword: this.config.get('sitePassword'),
             }
         ) // done creating auth file
     }

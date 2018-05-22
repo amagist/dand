@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser')
 const http = require('http')
 const RED = require('node-red')
 const basicAuth = require('basic-auth')
+const bcrypt = require('bcryptjs')
 
 // read settings.js
 const OIDsettings = require('./oid-settings.js')
@@ -82,7 +83,7 @@ function ensureAuthenticated(req, res, next) {
         if (
             !credentials ||
             credentials.name !== auth.username ||
-            credentials.pass !== auth.password
+            credentials.pass !== bcrypt.hashSync(auth.password, 8)
         ) {
             res.statusCode = 401
             res.setHeader('WWW-Authenticate', 'Basic realm="log in"')

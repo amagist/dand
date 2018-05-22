@@ -1,4 +1,5 @@
-var Generator = require('yeoman-generator')
+const Generator = require('yeoman-generator')
+const bcrypt = require('bcryptjs')
 
 module.exports = class extends Generator {
     constructor(args, opts) {
@@ -61,7 +62,7 @@ module.exports = class extends Generator {
                 this.config.set('username', answers.username)
                 this.config.set(
                     'password',
-                    require('bcryptjs').hashSync(answers.password, 8)
+                    bcrypt.hashSync(answers.password, 8)
                 )
                 this.config.set('id', answers.id)
                 this.config.set('secret', answers.secret)
@@ -127,13 +128,16 @@ module.exports = class extends Generator {
                 this.config.set('username', answers.username)
                 this.config.set(
                     'password',
-                    require('bcryptjs').hashSync(answers.password, 8)
+                    bcrypt.hashSync(answers.password, 8)
                 )
                 this.config.set('id', 1)
                 this.config.set('secret', 1)
                 this.config.set('authentication', 'basic')
                 this.config.set('siteUsername', answers.siteUsername)
-                this.config.set('sitePassword', answers.sitePassword)
+                this.config.set(
+                    'sitePassword',
+                    bcrypt.hashSync(answers.sitePassword, 8)
+                )
             })
             // end basic auth stuff
         } else {
@@ -182,7 +186,7 @@ module.exports = class extends Generator {
                 this.config.set('username', answers.username)
                 this.config.set(
                     'password',
-                    require('bcryptjs').hashSync(answers.password, 8)
+                    bcrypt.hashSync(answers.password, 8)
                 )
                 this.config.set('id', 1)
                 this.config.set('secret', 1)

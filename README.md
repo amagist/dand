@@ -8,14 +8,15 @@ Deploys a microsite using the RPT's methodologies, allowing you to get a site ru
 2.  Install necessary tools: `Cloud Foundary CLI`, `node` & `npm`.
 3.  You need to run `npm install -g yo`
 4.  From the `generator-deploy` directory of this repo, run `npm link` (this is a temporary workaround for the yeoman script). Once you've done this, navigate back to the root directory or you'll forget later
-5.  Think of a unique app name for your bluemix route. Something like _client-name_-microsite would work.
-6.  Log into to Cloud foundary `cf login`. Make sure you're in the same location (api, space, account, region) as where you plan to put the microsite.
+5.  Run `npm install` to install all the packages locally (cloud foundary will do this for the IBM Cloud app for you)
+6.  Think of a unique app name for your bluemix route. Something like _client-name_-microsite would work.
+7.  Log into to Cloud foundary `cf login`. Make sure you're in the same location (api, space, account, region) as where you plan to put the microsite.
 
 ## Step 1 - Generate some HTML
 
 1.  [Download Mobirise](http://mobirise.com/)
 2.  Fire it up, and drag & drop components in the builder until you've got a site. Additional pages can be added too.
-3.  Click `Publish` on the top right, then select Local Drive Folder. Choose the `public/pages` folder of the repo you just cloned. This will dump all html, stylesheets, and images into this repository.
+3.  Click `Publish` on the top right, then select Local Drive Folder. Choose the `public` folder of the repo you just cloned. This will dump all html, stylesheets, and images into this repository.
 
 (note: You can manually create html, or use another site builder, as long as the links are all relative and you have an index.html as the root)
 

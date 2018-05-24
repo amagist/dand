@@ -213,6 +213,7 @@ app.get('/failure', function(req, res) {
     res.send('Login failed')
 })
 
+/*
 // redirect root to index.html
 app.get('/', ensureAuthenticated, function(req, res) {
     res.redirect('/pages/index.html')
@@ -220,6 +221,10 @@ app.get('/', ensureAuthenticated, function(req, res) {
 
 // serve the files out of ./public as our main files
 app.use(express.static(__dirname + '/public'), ensureAuthenticated)
+*/
+
+app.use(ensureAuthenticated)
+app.use(express.static(__dirname + '/public'))
 
 // start server on the specified port and binding host
 server.listen(appEnv.port)

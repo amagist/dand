@@ -1,27 +1,24 @@
-const path = require('path')
-const express = require('express')
-const session = require('express-session')
-const passport = require('passport')
-const cookieParser = require('cookie-parser')
-const http = require('http')
-const RED = require('node-red')
-const basicAuth = require('basic-auth')
-const bcrypt = require('bcryptjs')
+const path = require('path'),
+    express = require('express'),
+    session = require('express-session'),
+    passport = require('passport'),
+    cookieParser = require('cookie-parser'),
+    http = require('http'),
+    RED = require('node-red'),
+    basicAuth = require('basic-auth'),
+    bcrypt = require('bcryptjs'),
+    OIDsettings = require('./oid-settings.js'),
+    redAuth = require('./redAuth.js'),
+    auth = require('./auth.js'),
+    cfenv = require('cfenv'),
+    passportIdaas = require('passport-idaas-openidconnect'),
+    couchStorage = require('./couchstorage')
 
-// read settings.js
-const OIDsettings = require('./oid-settings.js')
-const redAuth = require('./redAuth.js')
-const auth = require('./auth.js')
+const VCAP_APPLICATION = JSON.parse(process.env.VCAP_APPLICATION)
+const app = express()
 
 // work around intermediate CA issue
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
-
-const cfenv = require('cfenv')
-
-const VCAP_APPLICATION = JSON.parse(process.env.VCAP_APPLICATION)
-
-// create a new express server
-const app = express()
 
 app.use(cookieParser())
 app.use(
@@ -37,14 +34,12 @@ app.use(passport.session())
 passport.serializeUser(function(user, done) {
     done(null, user)
 })
-
 passport.deserializeUser(function(obj, done) {
     done(null, obj)
 })
 
-var OpenIDConnectStrategy = require('passport-idaas-openidconnect')
-    .IDaaSOIDCStrategy
-var Strategy = new OpenIDConnectStrategy(
+let OpenIDConnectStrategy = passportIdaas.IDaaSOIDCStrategy
+let Strategy = new OpenIDConnectStrategy(
     {
         authorizationURL: OIDsettings.authorization_url,
         tokenURL: OIDsettings.token_url,
@@ -70,7 +65,7 @@ var Strategy = new OpenIDConnectStrategy(
 passport.use(Strategy)
 
 // get the app environment from Cloud Foundry
-var appEnv = cfenv.getAppEnv()
+let appEnv = cfenv.getAppEnv()
 
 // login route
 app.get('/login', passport.authenticate('openidconnect', {}))
@@ -85,7 +80,7 @@ function bcryptMatch(input, hash) {
 // validate login
 function ensureAuthenticated(req, res, next) {
     if (auth.on === 'basic') {
-        var credentials = basicAuth(req)
+        let credentials = basicAuth(req)
 
         if (
             !credentials ||
@@ -115,7 +110,7 @@ function ensureAuthenticated(req, res, next) {
 
 // handle callback, if authentication succeeds redirect to original requested url, otherwise go to /failure
 app.get('/auth/callback', function(req, res, next) {
-    var redirect_url = req.session.originalUrl
+    let redirect_url = req.session.originalUrl
     passport.authenticate('openidconnect', {
         successRedirect: redirect_url,
         failureRedirect: '/failure',
@@ -129,7 +124,7 @@ app.get('/logout', function(req, res) {
     res.send('Logged out')
 })
 
-var REDsettings = {
+let REDsettings = {
     mqttReconnectTime: 15000,
     serialReconnectTime: 15000,
     debugMaxLength: 1000,
@@ -165,7 +160,7 @@ var REDsettings = {
 
     functionGlobalContext: {},
 
-    storageModule: require('./couchstorage'),
+    storageModule: couchStorage,
     adminAuth: {
         type: 'credentials',
         users: [
@@ -179,10 +174,10 @@ var REDsettings = {
 }
 
 REDsettings.couchAppname = VCAP_APPLICATION['application_name']
-var storageServiceName =
+let storageServiceName =
     process.env.NODE_RED_STORAGE_NAME ||
     new RegExp('^' + REDsettings.couchAppname + '.Cloudant')
-var couchService = appEnv.getService(storageServiceName)
+let couchService = appEnv.getService(storageServiceName)
 
 if (!couchService) {
     console.log('Failed to find Cloudant service')
@@ -197,7 +192,7 @@ if (!couchService) {
 REDsettings.couchUrl = couchService.credentials.url
 
 // Create a server
-var server = http.createServer(app)
+const server = http.createServer(app)
 
 // Initialise the runtime with a server and settings
 RED.init(server, REDsettings)
@@ -210,18 +205,8 @@ app.use(REDsettings.httpNodeRoot, ensureAuthenticated, RED.httpNode)
 
 // failure page (can be overriden within NodeRED)
 app.get('/failure', function(req, res) {
-    res.send('Login failed')
+    res.send('Login failed - not authorised')
 })
-
-/*
-// redirect root to index.html
-app.get('/', ensureAuthenticated, function(req, res) {
-    res.redirect('/pages/index.html')
-})
-
-// serve the files out of ./public as our main files
-app.use(express.static(__dirname + '/public'), ensureAuthenticated)
-*/
 
 app.use(ensureAuthenticated)
 app.use(express.static(__dirname + '/public'))

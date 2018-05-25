@@ -1,5 +1,4 @@
-const path = require('path'),
-    express = require('express'),
+const express = require('express'),
     session = require('express-session'),
     passport = require('passport'),
     cookieParser = require('cookie-parser'),
@@ -8,37 +7,15 @@ const path = require('path'),
     basicAuth = require('basic-auth'),
     bcrypt = require('bcryptjs'),
     OIDsettings = require('./oid-settings.js'),
-    redAuth = require('./redAuth.js'),
     auth = require('./auth.js'),
     cfenv = require('cfenv'),
     passportIdaas = require('passport-idaas-openidconnect'),
-    couchStorage = require('./couchstorage')
+    REDConfig = require('./REDConfig.js'),
+    app = express(),
+    VCAP_APPLICATION = JSON.parse(process.env.VCAP_APPLICATION),
+    appEnv = cfenv.getAppEnv(),
+    OpenIDConnectStrategy = passportIdaas.IDaaSOIDCStrategy
 
-const VCAP_APPLICATION = JSON.parse(process.env.VCAP_APPLICATION)
-const app = express()
-
-// work around intermediate CA issue
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
-
-app.use(cookieParser())
-app.use(
-    session({
-        resave: 'true',
-        saveUninitialized: 'true',
-        secret: 'keyboard cat',
-    })
-)
-app.use(passport.initialize())
-app.use(passport.session())
-
-passport.serializeUser(function(user, done) {
-    done(null, user)
-})
-passport.deserializeUser(function(obj, done) {
-    done(null, obj)
-})
-
-let OpenIDConnectStrategy = passportIdaas.IDaaSOIDCStrategy
 let Strategy = new OpenIDConnectStrategy(
     {
         authorizationURL: OIDsettings.authorization_url,
@@ -62,13 +39,28 @@ let Strategy = new OpenIDConnectStrategy(
     }
 )
 
+// work around intermediate CA issue
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+
+app.use(cookieParser())
+app.use(
+    session({
+        resave: 'true',
+        saveUninitialized: 'true',
+        secret: 'keyboard cat',
+    })
+)
+app.use(passport.initialize())
+app.use(passport.session())
+
+passport.serializeUser(function(user, done) {
+    done(null, user)
+})
+passport.deserializeUser(function(obj, done) {
+    done(null, obj)
+})
+
 passport.use(Strategy)
-
-// get the app environment from Cloud Foundry
-let appEnv = cfenv.getAppEnv()
-
-// login route
-app.get('/login', passport.authenticate('openidconnect', {}))
 
 function bcryptMatch(input, hash) {
     if (bcrypt.compareSync(input, hash)) {
@@ -77,16 +69,14 @@ function bcryptMatch(input, hash) {
         return false
     }
 }
-// validate login
-function ensureAuthenticated(req, res, next) {
-    if (auth.on === 'basic') {
-        let credentials = basicAuth(req)
 
+function ensureAuthenticated(req, res, next) {
+    if (auth.type === 'basic') {
+        let credentials = basicAuth(req)
         if (
             !credentials ||
             credentials.name !== auth.username ||
             !bcryptMatch(credentials.pass, auth.password)
-            /* bcrypt.hashSync(credentials.pass, 8) !== auth.password */
         ) {
             res.statusCode = 401
             res.setHeader('WWW-Authenticate', 'Basic realm="log in"')
@@ -94,13 +84,11 @@ function ensureAuthenticated(req, res, next) {
         } else {
             return next()
         }
-        // end pasted code
-    } else if (auth.on === 'w3id') {
+    } else if (auth.type === 'w3id') {
         if (!req.isAuthenticated()) {
             req.session.originalUrl = req.originalUrl
             res.redirect('/login')
         } else {
-            //  return next();
             next()
         }
     } else {
@@ -108,7 +96,7 @@ function ensureAuthenticated(req, res, next) {
     }
 }
 
-// handle callback, if authentication succeeds redirect to original requested url, otherwise go to /failure
+// app.get routes
 app.get('/auth/callback', function(req, res, next) {
     let redirect_url = req.session.originalUrl
     passport.authenticate('openidconnect', {
@@ -116,69 +104,17 @@ app.get('/auth/callback', function(req, res, next) {
         failureRedirect: '/failure',
     })(req, res, next)
 })
-
-// never used - to be removed?
-app.get('/logout', function(req, res) {
-    req.session.destroy()
-    req.logout()
-    res.send('Logged out')
+app.get('/failure', function(req, res) {
+    res.send('Login failed - not authorised')
 })
+app.get('/login', passport.authenticate('openidconnect', {}))
 
-let REDsettings = {
-    mqttReconnectTime: 15000,
-    serialReconnectTime: 15000,
-    debugMaxLength: 1000,
-
-    // Add the bluemix-specific nodes in
-    nodesDir: path.join(__dirname, 'nodes'),
-
-    // Blacklist the non-bluemix friendly nodes
-    nodesExcludes: [
-        '66-mongodb.js',
-        '75-exec.js',
-        '35-arduino.js',
-        '36-rpi-gpio.js',
-        '25-serial.js',
-        '28-tail.js',
-        '50-file.js',
-        '31-tcpin.js',
-        '32-udp.js',
-        '23-watch.js',
-    ],
-
-    // Enable module reinstalls on start-up; this ensures modules installed are restored after a restage
-    autoInstallModules: true,
-
-    // paths
-    httpAdminRoot: '/red',
-    httpNodeRoot: '/',
-
-    // UI
-    ui: {
-        path: 'ui',
-    },
-
-    functionGlobalContext: {},
-
-    storageModule: couchStorage,
-    adminAuth: {
-        type: 'credentials',
-        users: [
-            {
-                username: redAuth.username,
-                password: redAuth.password, // paste your password hash here
-                permissions: '*',
-            },
-        ],
-    },
-}
-
+let REDsettings = REDConfig.REDsettings
 REDsettings.couchAppname = VCAP_APPLICATION['application_name']
 let storageServiceName =
     process.env.NODE_RED_STORAGE_NAME ||
     new RegExp('^' + REDsettings.couchAppname + '.Cloudant')
 let couchService = appEnv.getService(storageServiceName)
-
 if (!couchService) {
     console.log('Failed to find Cloudant service')
     if (process.env.NODE_RED_STORAGE_NAME) {
@@ -191,28 +127,12 @@ if (!couchService) {
 }
 REDsettings.couchUrl = couchService.credentials.url
 
-// Create a server
+// Create a server, initialise routes, start nodeRED
 const server = http.createServer(app)
-
-// Initialise the runtime with a server and settings
 RED.init(server, REDsettings)
-
-// Serve the editor UI - must be authenticated
 app.use(REDsettings.httpAdminRoot, ensureAuthenticated, RED.httpAdmin)
-
-// Serve the http nodes UI (uncomment following line if you require authenticated endpoint - needed for authenticated dashboard)
 app.use(REDsettings.httpNodeRoot, ensureAuthenticated, RED.httpNode)
-
-// failure page (can be overriden within NodeRED)
-app.get('/failure', function(req, res) {
-    res.send('Login failed - not authorised')
-})
-
 app.use(ensureAuthenticated)
 app.use(express.static(__dirname + '/public'))
-
-// start server on the specified port and binding host
 server.listen(appEnv.port)
-
-// Start NodeRED
 RED.start()

@@ -16,7 +16,7 @@ Deploys a microsite using the RPT's methodologies, allowing you to get a site ru
 
 1.  [Download Mobirise](http://mobirise.com/)
 2.  Fire it up, and drag & drop components in the builder until you've got a site. Additional pages can be added too.
-3.  Click `Publish` on the top right, then select Local Drive Folder. Choose the `public` folder of the repo you just cloned. This will dump all html, stylesheets, and images into this repository.
+3.  Click `Publish` on the top right, then select Local Drive Folder. Choose the `public` folder of the repo you just cloned. This will dump all html, stylesheets, and images into this repository. Make sure you have turned off "Publish changes only" option when redeploying code
 
 (note: You can manually create html, or use another site builder, as long as the links are all relative and you have an index.html as the root)
 

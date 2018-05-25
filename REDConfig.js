@@ -1,6 +1,8 @@
 const path = require('path'),
     redAuth = require('./redAuth.js'),
-    couchStorage = require('./couchstorage.js')
+    couchStorage = require('./couchstorage.js'),
+    _ = require('lodash'),
+    moment = require('moment')
 
 exports.REDsettings = {
     mqttReconnectTime: 15000,
@@ -36,7 +38,10 @@ exports.REDsettings = {
         path: 'ui',
     },
 
-    functionGlobalContext: {},
+    functionGlobalContext: {
+        moment: moment,
+        lodash: _,
+    },
 
     storageModule: couchStorage,
     adminAuth: {

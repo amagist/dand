@@ -27,6 +27,7 @@ Deploys a microsite using the RPT's methodologies, allowing you to get a site ru
     * Click Catalog, then search for Cloudant
     * if on IBM CIO Cloud, deploy a "CloudantDB Dedicated" instance, with the following naming convention `<appname>-Cloudant NoSQL DB Dedicated`. Note, to use Authentication, at the moment you must use this method, on CIO bluemix.
     * If on the public IBM Cloud, use a normal CloudantDB, with the name `<appname>-Cloudant NoSQL DB`.
+3.  Alternatively, from the command line, type `cf create-service CloudantNoSQLDB Lite "<appname>-Cloudant NoSQL DB"` or `cf create-service CloudantNoSQLDB Dedicated Lite "<appname>-Cloudant NoSQL DB Dedicated"`
 
 ## Step 3 - Authentication (if using it)
 

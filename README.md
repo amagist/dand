@@ -54,7 +54,7 @@ If you've enabled authentication, all mobirise pages will be protected by w3id. 
 
 [Tom Sherlock](mailto:tsherloc@uk.ibm.com)
 
-### Installing stuff
+### Programs to install (if not already on machine)
 
 [Node.js](https://nodejs.org/en/download/)
 [Cloud Foundary CLI](https://docs.cloudfoundry.org/cf-cli/install-go-cli.html)
@@ -62,5 +62,4 @@ If you've enabled authentication, all mobirise pages will be protected by w3id. 
 ### Reference guides
 
 [Embedded node-RED](https://nodered.org/docs/embedding)  
-Initial node-RED embedding implementation taken from [here](https://github.ibm.com/rapid-prototyping/node-red-w3id)  
 [yeoman](http://yeoman.io/)

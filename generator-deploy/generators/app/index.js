@@ -1,5 +1,5 @@
 const Generator = require('yeoman-generator')
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcrypt')
 
 module.exports = class extends Generator {
     constructor(args, opts) {
@@ -234,5 +234,23 @@ module.exports = class extends Generator {
                 sitePassword: this.config.get('sitePassword'),
             }
         ) // done creating auth file
+    }
+    runCMD() {
+        // command is cf create-service CloudantNoSQLDB Lite "<appname>-Cloudant NoSQL DB"
+        this.log('creating the CloudantDB Service')
+        if (this.config.get('domain') === 'eu-gb.mybluemix.net') {
+            this.spawnCommandSync('cf', [
+                'create-service',
+                'CloudantNoSQLDB',
+                'Lite',
+                this.config.get('DB'),
+            ])
+        } else
+            this.spawnCommandSync('cf', [
+                'create-service',
+                'CloudantNoSQLDB Dedicated',
+                'Shared Dedicated',
+                this.config.get('DB'),
+            ])
     }
 }

@@ -10,7 +10,7 @@ Deploys a microsite using the RPT's methodologies, allowing you to get a site ru
 4.  From the `generator-deploy` directory of this repo, run `npm link` (this is a temporary workaround for the yeoman script). Once you've done this, navigate back to the root directory or you'll forget later
 5.  Run `npm install` to install all the packages locally (cloud foundary will do this for the IBM Cloud app for you)
 6.  Think of a unique app name for your bluemix route. Something like _client-name_-microsite would work.
-7.  Log into to Cloud foundary `cf login`. Make sure you're in the same location (api, space, account, region) as where you plan to put the microsite.
+7.  Log into to Cloud foundary with `cf login`. Make sure you're in the same location (api, space, account, region) as where you plan to put the microsite. (Do this bit now as there's some auto-config here that relies on you being logged in)
 
 ## Step 1 - Generate some HTML
 
@@ -20,16 +20,7 @@ Deploys a microsite using the RPT's methodologies, allowing you to get a site ru
 
 (note: You can manually create html, or use another site builder, as long as the links are all relative and you have an index.html as the root)
 
-## Step 2 - Set up a Cloudant DB instance - needed for node-RED
-
-1.  Log into [bluemix](console.bluemix.net), ensuring you're in the right location (where you cf logged in to).
-2.  Create a CloudantDB service - in the space where the microsite will be:
-    * Click Catalog, then search for Cloudant
-    * if on IBM CIO Cloud, deploy a "CloudantDB Dedicated" instance, with the following naming convention `<appname>-Cloudant NoSQL DB Dedicated`. Note, to use Authentication, at the moment you must use this method, on CIO bluemix.
-    * If on the public IBM Cloud, use a normal CloudantDB, with the name `<appname>-Cloudant NoSQL DB`.
-3.  Alternatively, from the command line, type `cf create-service CloudantNoSQLDB Lite "<appname>-Cloudant NoSQL DB"` or `cf create-service CloudantNoSQLDB Dedicated Lite "<appname>-Cloudant NoSQL DB Dedicated"`
-
-## Step 3 - Authentication (if using it)
+## Step 2 - Set up Authentication (if using it)
 
 1.  There's an option to use basic (username and password) authentication, or use IBM's SSO/w3id to log in. For any client facing public microsites we recommend using the basic authentication, for anything internal use SSO. You can also have no authentication.
 2.  w3id setup (if using it)
@@ -40,10 +31,11 @@ Deploys a microsite using the RPT's methodologies, allowing you to get a site ru
 
 ## Step 3 - Yeoman Generator
 
+0.  Make sure you're logged into Cloud Foundary (run `cf login` to do this)
 1.  Run `yo deploy` (for no authentication) or `yo deploy w3id` (for w3id authentication), or `yo deploy basic` (for basic authentication) from the root directory of this repo (it won't work anywhere else).
-2.  Follow the instructions, entering your information when asked
-3.  This will create several files, taking the hassle out of configuring the authentication and node-RED setup yourself.
-4.  Use the cf command line tools to deploy - `cf push`- This will deploy your app in your area, connecting to the DB you've set up.
+1.  Follow the instructions, entering your information when asked
+1.  This will create several files, taking the hassle out of configuring the authentication and node-RED setup yourself. This will also spin up a CloudantDB instance for node-RED to connect to
+1.  Use the cf command line tools to deploy - `cf push`- This will deploy your app in your area, connecting to the DB you've set up.
 
 ## Step 4 - Done!
 
@@ -63,6 +55,9 @@ If you've enabled authentication, all mobirise pages will be protected by w3id. 
 [Tom Sherlock](mailto:tsherloc@uk.ibm.com)
 
 ### Installing stuff
+
+[Node.js](https://nodejs.org/en/download/)
+[Cloud Foundary CLI](https://docs.cloudfoundry.org/cf-cli/install-go-cli.html)
 
 ### Reference guides
 

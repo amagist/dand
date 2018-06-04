@@ -130,8 +130,24 @@ REDsettings.couchUrl = couchService.credentials.url
 // Create a server, initialise routes, start nodeRED
 const server = http.createServer(app)
 RED.init(server, REDsettings)
-app.use(REDsettings.httpAdminRoot, ensureAuthenticated, RED.httpAdmin)
-app.use(REDsettings.httpNodeRoot, ensureAuthenticated, RED.httpNode)
+
+/*
+if both, authenticate editor /red route and all http nodes
+if node, only authenticate http nodes
+if http, all node-RED nodes are unauthenticated but the /red editor is
+*/
+console.log('!>?!>?!>?!>?!>?? protect routes: ', auth.protectRoutes)
+if (auth.protectRoutes === 'both') {
+    app.use(REDsettings.httpAdminRoot, ensureAuthenticated, RED.httpAdmin)
+    app.use(REDsettings.httpNodeRoot, ensureAuthenticated, RED.httpNode)
+} else if (auth.protectRoutes === 'node') {
+    app.use(REDsettings.httpNodeRoot, ensureAuthenticated, RED.httpNode)
+    app.use(REDsettings.httpAdminRoot, RED.httpAdmin)
+} else if (auth.protectRoutes === 'http') {
+    app.use(REDsettings.httpAdminRoot, ensureAuthenticated, RED.httpAdmin)
+    app.use(REDsettings.httpNodeRoot, RED.httpNode)
+}
+
 app.use(ensureAuthenticated)
 app.use(express.static(__dirname + '/public'))
 server.listen(appEnv.port)

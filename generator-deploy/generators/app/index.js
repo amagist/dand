@@ -16,9 +16,6 @@ module.exports = class extends Generator {
             this.log(
                 '\n Register your SSO app at https://w3.innovate.ibm.com/tools/sso/home.html, and grab your client ID and secret. You\'ll have to copy in the certificate yourself'
             )
-            this.log(
-                '\n Note: you can only run an authenticated app on IBM CIO Cloud (w3ibm.mybluemix.net), not on public (at the moment)'
-            )
             return this.prompt([
                 {
                     type: 'input',
@@ -50,6 +47,13 @@ module.exports = class extends Generator {
                     message: 'Enter a password for your node-RED editor',
                     default: 'password',
                 },
+                {
+                    type: 'input',
+                    name: 'protectRoutes',
+                    message:
+                        'Do you want all http nodes to be authenticated, or just the editor? If using as an API server, select "http" (Enter both, http, or node)',
+                    default: 'both',
+                },
             ]).then(answers => {
                 this.config.save()
                 this.config.set('domain', 'w3ibm.mybluemix.net')
@@ -58,6 +62,7 @@ module.exports = class extends Generator {
                     answers.name + '-Cloudant NoSQL DB Dedicated'
                 )
                 this.config.set('name', answers.name)
+                this.config.set('protectRoutes', answers.protectRoutes)
                 this.config.set('dedicated', answers.dedicated)
                 this.config.set('username', answers.username)
                 this.config.set(
@@ -69,8 +74,6 @@ module.exports = class extends Generator {
                 this.config.set('authentication', 'w3id')
             })
         } else if (this.config.get('auth') === 'basic') {
-            // do basic auth stuff
-
             this.log(
                 '\n Auto-config for microsites. First, take a look at the readme.'
             )
@@ -101,6 +104,13 @@ module.exports = class extends Generator {
                 },
                 {
                     type: 'input',
+                    name: 'protectRoutes',
+                    message:
+                        'Do you want all http nodes to be authenticated, or just the editor? If using as an API server, select "http" (Enter both, http, or node)',
+                    default: 'both',
+                },
+                {
+                    type: 'input',
                     name: 'siteUsername',
                     message: 'Enter a username for your microsite',
                     default: 'admin',
@@ -126,6 +136,7 @@ module.exports = class extends Generator {
                 this.config.set('name', answers.name)
                 this.config.set('dedicated', answers.dedicated)
                 this.config.set('username', answers.username)
+                this.config.set('protectRoutes', answers.protectRoutes)
                 this.config.set(
                     'password',
                     bcrypt.hashSync(answers.password, 8)
@@ -232,6 +243,7 @@ module.exports = class extends Generator {
                 authentication: this.config.get('authentication'),
                 siteUsername: this.config.get('siteUsername'),
                 sitePassword: this.config.get('sitePassword'),
+                protectRoutes: this.config.get('protectRoutes'),
             }
         ) // done creating auth file
     }

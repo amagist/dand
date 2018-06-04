@@ -4,9 +4,9 @@ Deploys a microsite using the RPT's methodologies, allowing you to get a site ru
 
 ## Step 0 - Fork this Repo, and some pre-reqs
 
-1.  On GitHub, fork this repo, then clone it onto your local machine.
-2.  Install necessary tools: `Cloud Foundary CLI`, `node` & `npm`.
-3.  You need to run `npm install -g yo`
+1.  On GitHub, fork this repo, then clone it onto your local machine. (Or just manually copy the files into a blank repo if you're using the Rapid Prototyping Organisation on GitHub).
+2.  Install necessary tools: `Cloud Foundary CLI`, `node` & `npm` - see bottom of this doc for links.
+3.  Run `npm install -g yo`
 4.  From the `generator-deploy` directory of this repo, run `npm link` (this is a temporary workaround for the yeoman script). Once you've done this, navigate back to the root directory or you'll forget later
 5.  Run `npm install` to install all the packages locally (cloud foundary will do this for the IBM Cloud app for you)
 6.  Think of a unique app name for your bluemix route. Something like _client-name_-microsite would work.

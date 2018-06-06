@@ -24,7 +24,7 @@ Deploys a microsite using the RPT's methodologies, allowing you to get a site ru
 
 There's 3 options here:
 
-- w3id authentication - for use when the IBM Intranet id& password is needed to secure. Only available to IBMers
+- w3id authentication - for use when the IBM Intranet id & password is needed to secure. Only available to IBMers
 
   - Register Bluemix route at [https://w3.innovate.ibm.com/tools/sso/home.html](https://w3.innovate.ibm.com/tools/sso/home.html) as an OpenIDConnect service (For the callback URL, register as `<Bluemix route>/auth/callback`)
   - To test, use of the w3id Staging service is recommended, this uses the live directory but not the live OpenIDConnect service

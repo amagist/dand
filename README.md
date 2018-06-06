@@ -56,6 +56,14 @@ If you've enabled authentication, all mobirise pages will be protected by w3id. 
   [{"id":"5b7ea8bf.70a15","type":"subflow","name":"w3id login","info":"This node checks to see if the user is logged in.\nIf not, it stores the original URL and redirects\nto /login. On a successful return, it resumes at\nthe stored URL","in":[{"x":52.5,"y":48,"wires":[{"id":"a6b19b7c.903648"}]}],"out":[{"x":399,"y":122,"wires":[{"id":"a6b19b7c.903648","port":1}]}]},{"id":"a6b19b7c.903648","type":"switch","z":"5b7ea8bf.70a15","name":"User null?","property":"req.user","propertyType":"msg","rules":[{"t":"null"},{"t":"else"}],"checkall":"true","outputs":2,"x":171.5,"y":48,"wires":[["d836655d.df5988"],[]]},{"id":"d836655d.df5988","type":"change","z":"5b7ea8bf.70a15","name":"Redirect to login","rules":[{"t":"set","p":"req.session.originalUrl","pt":"msg","to":"req.originalUrl","tot":"msg"},{"t":"set","p":"statusCode","pt":"msg","to":"307","tot":"num"},{"t":"set","p":"headers.location","pt":"msg","to":"/login","tot":"str"}],"action":"","property":"","from":"","to":"","reg":false,"x":392,"y":42,"wires":[["9acba24b.369168"]]},{"id":"9acba24b.369168","type":"http response","z":"5b7ea8bf.70a15","name":"","x":581.5,"y":42.75,"wires":[]}]
 ```
 
+## Step 5 - changes to the front end
+
+If you need to make any changes to the front end html after the site has been deployed, follow these steps:
+
+1.  Export from mobirise into the `/public` folder of the repo as before - ensuring you have turned off "Publish changes only" option
+2.  Check you're logged in to cloud foundry
+3.  Run `cf push` to update your live app with the changes.
+
 ## Help/resources
 
 ### Contacts

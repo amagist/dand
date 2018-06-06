@@ -5,12 +5,12 @@ Deploys a microsite using the RPT's methodologies, allowing you to get a site ru
 ## Step 0 - Fork this Repo, and some pre-reqs
 
 1.  On GitHub, fork this repo, then clone it onto your local machine. (Or just manually copy the files into a blank repo if you're using the Rapid Prototyping Organisation on GitHub).
-2.  Install necessary tools: `Cloud Foundary CLI`, `node` & `npm` - see bottom of this doc for links.
+2.  Install necessary tools: `Cloud Foundry CLI`, `node` & `npm` - see bottom of this doc for links. If you're not sure what's installed, run `node -v` and `npm -v` to check if they're installed.
 3.  Run `npm install -g yo`
 4.  From the `generator-deploy` directory of this repo, run `npm link` (this is a temporary workaround for the yeoman script). Once you've done this, navigate back to the root directory or you'll forget later
-5.  Run `npm install` to install all the packages locally (cloud foundary will do this for the IBM Cloud app for you)
+5.  Run `npm install` to install all the packages locally (cloud Foundry will do this for the IBM Cloud app for you)
 6.  Think of a unique app name for your bluemix route. Something like _client-name_-microsite would work.
-7.  Log into to Cloud foundary with `cf login`. Make sure you're in the same location (api, space, account, region) as where you plan to put the microsite. (Do this bit now as there's some auto-config here that relies on you being logged in)
+7.  Log into to Cloud Foundry with `cf login --sso`. Make sure you're in the same location (api, space, account, region) as where you plan to put the microsite. (Do this bit now as there's some auto-config here that relies on you being logged in)
 
 ## Step 1 - Generate some HTML
 
@@ -22,16 +22,24 @@ Deploys a microsite using the RPT's methodologies, allowing you to get a site ru
 
 ## Step 2 - Set up Authentication (if using it)
 
-1.  There's an option to use basic (username and password) authentication, or use IBM's SSO/w3id to log in. For any client facing public microsites we recommend using the basic authentication, for anything internal use SSO. You can also have no authentication.
-2.  w3id setup (if using it)
-    * Register Bluemix route at [https://w3.innovate.ibm.com/tools/sso/home.html](https://w3.innovate.ibm.com/tools/sso/home.html) as an OpenIDConnect service (For the callback URL, register as `<Bluemix route>/auth/callback`)
-    * To test, use of the w3id Staging service is recommended, this uses the live directory but not the live OpenIDConnect service
-    * Download the certificate supplied as `oidc_w3id.cer` and upload to the root directory of this repo
-    * Keep a note of your Client ID and secret, you'll need it later
+There's 3 options here:
+
+- w3id authentication - for use when the IBM Intranet id& password is needed to secure. Only available to IBMers
+
+  - Register Bluemix route at [https://w3.innovate.ibm.com/tools/sso/home.html](https://w3.innovate.ibm.com/tools/sso/home.html) as an OpenIDConnect service (For the callback URL, register as `<Bluemix route>/auth/callback`)
+  - To test, use of the w3id Staging service is recommended, this uses the live directory but not the live OpenIDConnect service
+  - Download the certificate supplied as `oidc_w3id.cer` and upload to the root directory of this repo
+  - Keep a note of your Client ID and secret, you'll need it later
+
+- Basic authentication - simple username & password (securely hashed). Best for client stuff or those without IBM/w3IDs
+
+  - think of a username and suitable password, for use in step 3
+
+- No authentication - website will be publically accessible if on public IBM Cloud, or accessible to anyone behind the IBM firewall if on CIO (private Cloud)
 
 ## Step 3 - Yeoman Generator
 
-0.  Make sure you're logged into Cloud Foundary (run `cf login` to do this)
+0.  Make sure you're logged into Cloud Foundry (you should've done this in step 0)
 1.  Run `yo deploy` (for no authentication) or `yo deploy w3id` (for w3id authentication), or `yo deploy basic` (for basic authentication) from the root directory of this repo (it won't work anywhere else).
 1.  Follow the instructions, entering your information when asked
 1.  This will create several files, taking the hassle out of configuring the authentication and node-RED setup yourself. This will also spin up a CloudantDB instance for node-RED to connect to
@@ -57,7 +65,7 @@ If you've enabled authentication, all mobirise pages will be protected by w3id. 
 ### Programs to install (if not already on machine)
 
 [Node.js](https://nodejs.org/en/download/)
-[Cloud Foundary CLI](https://docs.cloudfoundry.org/cf-cli/install-go-cli.html)
+[Cloud Foundry CLI](https://docs.cloudfoundry.org/cf-cli/install-go-cli.html)
 
 ### Reference guides
 

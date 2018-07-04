@@ -2,6 +2,11 @@ body {
   font-style: normal;
   line-height: 1.5;
 }
+
+body.noScroll {
+  overflow: hidden;
+}
+
 .mbr-section-title {
   font-style: normal;
   line-height: 1.2;
@@ -1757,6 +1762,7 @@ body {
 }
 .cid-qWPNXiOv8R {
   background-image: url("../../../assets/images/dice-3-1024x768.png");
+  max-height: 100%;
 }
 .cid-qWPNWQiHKW .navbar {
   padding: .5rem 0;

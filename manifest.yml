@@ -1,0 +1,10 @@
+applications:
+- path: .
+  memory: 768M
+  instances: 1
+  domain: eu-gb.mybluemix.net
+  name: dnd
+  host: dnd
+  disk_quota: 1024M
+services:
+- dnd-cloudantNoSQLDB

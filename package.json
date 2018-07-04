@@ -1,37 +1,22 @@
 {
-    "name": "microsite-template",
-    "version": "0.0.1",
-    "private": true,
-    "scripts": {
-        "start": "node app.js"
-    },
-    "dependencies": {
-        "bcrypt": "^2.0.1",
-        "cfenv": "1.0.x",
-        "cookie-parser": "^1.4.3",
-        "express": "^4.16.3",
-        "express-session": "^1.15.6",
-        "feedparser": "~0.19.2",
-        "finalhandler": "^1.1.1",
-        "lodash": "^4.17.10",
-        "moment": "^2.22.1",
-        "nano": "^5.12.2",
-        "node-red": "^0.18.6",
-        "node-red-bluemix-nodes": "^1.1.10",
-        "node-red-contrib-scx-ibmiotapp": "0.x",
-        "node-red-node-cf-cloudant": "0.x",
-        "node-red-node-watson": "^0.6.13",
-        "passport": "0.3.x",
-        "passport-idaas-openidconnect": "2.x",
-        "redis": "~0.10.1",
-        "serve-static": "^1.13.2",
-        "util": "^0.10.3"
-    },
-    "devDependencies": {
-        "yo": "^2.0.2"
-    },
-    "repository": {},
-    "engines": {
-        "node": "6.x"
-    }
+  "name": "cloudant_boilerplate_nodejs",
+  "version": "0.0.2",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "4.15.x",
+    "ejs": "2.5.x",
+    "cloudant": "1.7.x",
+    "body-parser": "1.17.x",
+    "method-override": "2.3.x",
+    "morgan": "1.8.x",
+    "errorhandler": "1.5.x",
+    "connect-multiparty": "2.0.x"
+  },
+  "repository": {},
+  "engines": {
+    "node": "6.x"
+  }
 }

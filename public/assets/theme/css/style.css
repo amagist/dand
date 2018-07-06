@@ -425,3 +425,9 @@ nav .mbr-section-btn {
 	top: 0;
 	left: -2400px;
 }
+
+#box_new {
+  margin: -1em 4em -1em 4em;
+  border:2px outset #9a9;
+  box-shadow: 5px 5px 15px rgba(0,0,0,0.4);
+}

@@ -29,7 +29,7 @@
 <form class="charsheet">
         <header>
           <section class="charname">
-            <label for="charname">Character Name</label><input name="charname" placeholder="Vadania Amastacia" />
+            <label for="charname">Character Name</label><input id="char-name" class="auto-save form-control" name="charname" placeholder="Vadania Amastacia" />
           </section>
           <section class="misc">
             <ul>
@@ -389,8 +389,33 @@
               </div>
             </section>
           </section>
+          
         </main>
+        <button type="submit" class="btn btn-primary">Save</button>
       </form>
+
+      <script>
+      $('.auto-save').savy('load');
+   
+   // you can pass a function to be called when savy is finished loading.
+   $('.auto-save').savy('load',function(){
+     console.log("All data from savy are loaded");
+   });
+   </script>
+   <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-36251023-1']);
+    _gaq.push(['_setDomainName', 'jqueryscript.net']);
+    _gaq.push(['_trackPageview']);
+  
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  
+  </script>
 
       <script src="assets/web/assets/jquery/jquery.min.js"></script>
       <script src="assets/popper/popper.min.js"></script>
@@ -402,6 +427,9 @@
       <script src="assets/theme/js/script.js"></script>
       <script src="char-func.js"></script>
       <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
+      <script src="https://code.jquery.com/jquery.min.js"></script>
+      <script src="savy.js"></script>
+
       
     </body>
     </html>

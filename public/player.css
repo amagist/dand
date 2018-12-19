@@ -1,0 +1,14 @@
+.playercard {
+    width: 100%;
+}
+
+img {
+    height: auto;
+    width: inherit;
+}
+
+a {
+    height: auto;
+    width: inherit;
+    cursor: pointer;
+}
